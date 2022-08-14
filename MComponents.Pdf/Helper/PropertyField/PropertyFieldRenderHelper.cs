@@ -28,7 +28,7 @@ namespace MComponents.Pdf.Helper.PropertyField
         {
             var propInfo = ReflectionHelper.GetIMPropertyInfo(pModel.GetType(), pPropertyField.Property, pPropertyField.PropertyType);
 
-            var paint = RenderStyles.GetParagraphPaint();
+            var paint = RenderStyles.GetDefaultPaint();
 
             var propname = propInfo.GetDisplayName(mL);
 

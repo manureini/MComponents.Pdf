@@ -27,16 +27,21 @@ namespace MComponents.Pdf.Helper
             return paint;
         }
 
-        public static SKPaint GetParagraphPaint()
+        public static SKPaint GetDefaultPaint()
         {
             var paint = new SKPaint();
 
             paint.TextSize = mTextSize;
             paint.IsAntialias = true;
             paint.Color = SKColors.Black;
+            paint.Typeface = GetTypeface(false, false);
 
             return paint;
         }
 
+        public static SKTypeface GetTypeface(bool pBold, bool pItalic)
+        {
+            return SKTypeface.FromFamilyName("Arial", pBold ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, pItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+        }
     }
 }

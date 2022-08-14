@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Coreflow.Activities.MComponents\Coreflow.Activities.MComponents\Coreflow.Activities.MComponents\Coreflow.Activities.MComponents.csproj" />
     <ProjectReference Include="..\..\MComponents\MComponents\MComponents.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Test.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
