@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.ExtendedProperties;
+﻿using AngleSharp;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using Markdig;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
@@ -35,9 +36,13 @@ namespace MComponents.Pdf.Helper.Markdown
         public bool mPageBreakRequired;
 
         protected IList<Block> mMarkdownDocument;
+
         protected int mBlocksWritten;
         protected int mInlinesWritten;
         protected int mLinesWritten;
+
+        protected int mListBlocksWritten;
+        protected bool mSkipNextBlockItemPrefix;
 
         protected SKPaint mPaint;
 
@@ -74,7 +79,7 @@ namespace MComponents.Pdf.Helper.Markdown
             mBlocksWritten = 0;
         }
 
-        private void Render(Block block)
+        private async Task Render(Block block)
         {
             switch (block)
             {
@@ -103,7 +108,7 @@ namespace MComponents.Pdf.Helper.Markdown
                     break;
 
                 case HtmlBlock html:
-                    //    Render(html);
+                    await Render(html);
                     break;
 
                 default:
@@ -119,6 +124,7 @@ namespace MComponents.Pdf.Helper.Markdown
             Render(((IEnumerable<Inline>)pBlock.Inline).ToArray());
 
             mX = mInitialX;
+            mY += GetLineHeight();
         }
 
         private void Render(ParagraphBlock pParagraphBlock)
@@ -129,21 +135,28 @@ namespace MComponents.Pdf.Helper.Markdown
             Render(((IEnumerable<Inline>)pParagraphBlock.Inline).ToArray());
 
             mX = mInitialX;
+            mY += GetLineHeight();
         }
 
         private void Render(ListBlock pListBlock)
         {
             mPaint = RenderStyles.GetDefaultPaint();
 
-            foreach (ListItemBlock block in pListBlock)
+            for (int i = mListBlocksWritten; i < pListBlock.Count; i++)
             {
+                var block = (ListItemBlock)pListBlock[i];
+
                 var oldInitialX = mInitialX;
 
                 mX = mInitialX;
 
                 mY += GetLineHeight();
 
-                mCanvas.DrawText("-", mX, mY, mPaint);
+                if (!mSkipNextBlockItemPrefix)
+                {
+                    mCanvas.DrawText("-", mX, mY, mPaint);
+                }
+
                 MoveCursorXForText("- ");
 
                 var textBounds = new SKRect();
@@ -151,16 +164,27 @@ namespace MComponents.Pdf.Helper.Markdown
 
                 mInitialX += width;
 
+                mListBlocksWritten = i;
+                mSkipNextBlockItemPrefix = false;
+
                 foreach (ParagraphBlock paragraphBlock in block)
                 {
                     Render(((IEnumerable<Inline>)paragraphBlock.Inline).ToArray());
                     mX = mInitialX;
+
+                    if (mPageBreakRequired)
+                    {
+                        mSkipNextBlockItemPrefix = true;
+                        return;
+                    }
                 }
 
                 mInitialX = oldInitialX;
             }
 
+            mListBlocksWritten = 0;
             mX = mInitialX;
+            mY += GetLineHeight();
         }
 
         private void Render(Inline[] pInlines)
@@ -265,6 +289,22 @@ namespace MComponents.Pdf.Helper.Markdown
             }
         }
 
+
+        private async Task Render(HtmlBlock pInline)
+        {
+            if(pInline.Type == HtmlBlockType.InterruptingBlock)
+            {
+                var html = string.Join(Environment.NewLine, pInline.Lines.Lines.Select(l => l.ToString()));
+
+                var config = Configuration.Default;
+                using var context = BrowsingContext.New(config);
+                using var doc = await context.OpenAsync(req => req.Content(html));
+
+            
+
+            }
+        }
+
         private void MoveCursorXForText(string text)
         {
             var textBounds = new SKRect();
@@ -277,8 +317,7 @@ namespace MComponents.Pdf.Helper.Markdown
         private float GetLineHeight()
         {
             var textBounds = new SKRect();
-            var width = mPaint.MeasureText("A", ref textBounds);
-
+            mPaint.MeasureText("A", ref textBounds);
             return textBounds.Size.Height + mLineSpace;
         }
 
