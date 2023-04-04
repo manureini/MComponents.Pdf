@@ -1,17 +1,11 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using Markdig.Syntax;
-using MComponents.MForm;
-using MComponents.Pdf.Helper;
+﻿using MComponents.MForm;
 using MComponents.Pdf.Helper.Markdown;
 using MComponents.Pdf.Helper.PropertyField;
 using Microsoft.Extensions.Localization;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MComponents.Pdf.Services
@@ -79,7 +73,7 @@ namespace MComponents.Pdf.Services
             document.Close();
         }
 
-        public Stream RenderMarkdown(string pMarkdown)
+        public async Task<Stream> RenderMarkdown(string pMarkdown)
         {
             var metadata = new SKDocumentPdfMetadata
             {
@@ -107,7 +101,7 @@ namespace MComponents.Pdf.Services
             while (true)
             {
                 using var pdfCanvas = document.BeginPage(pageWidth, pageHeight);
-                render.Render(pdfCanvas, 0, 0);
+                await render.Render(pdfCanvas, 0, 0);
 
                 document.EndPage();
 

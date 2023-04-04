@@ -1,13 +1,10 @@
 ﻿using AngleSharp;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using Markdig;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MComponents.Pdf.Helper.Markdown
@@ -54,7 +51,7 @@ namespace MComponents.Pdf.Helper.Markdown
             mMarkdownDocument = Markdig.Markdown.Parse(pMarkdown);
         }
 
-        public void Render(SKCanvas pCanvas, float pX, float pY)
+        public async Task Render(SKCanvas pCanvas, float pX, float pY)
         {
             mPageBreakRequired = false;
 
@@ -69,7 +66,7 @@ namespace MComponents.Pdf.Helper.Markdown
 
             for (int i = mBlocksWritten; i < mMarkdownDocument.Count; i++)
             {
-                Render(mMarkdownDocument[i]);
+                await Render(mMarkdownDocument[i]);
                 mBlocksWritten = i;
 
                 if (mPageBreakRequired)
@@ -292,7 +289,7 @@ namespace MComponents.Pdf.Helper.Markdown
 
         private async Task Render(HtmlBlock pInline)
         {
-            if(pInline.Type == HtmlBlockType.InterruptingBlock)
+            if (pInline.Type == HtmlBlockType.InterruptingBlock)
             {
                 var html = string.Join(Environment.NewLine, pInline.Lines.Lines.Select(l => l.ToString()));
 
@@ -300,7 +297,7 @@ namespace MComponents.Pdf.Helper.Markdown
                 using var context = BrowsingContext.New(config);
                 using var doc = await context.OpenAsync(req => req.Content(html));
 
-            
+
 
             }
         }
