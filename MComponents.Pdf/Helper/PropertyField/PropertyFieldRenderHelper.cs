@@ -1,6 +1,7 @@
 ﻿using MComponents.MForm;
 using Microsoft.Extensions.Localization;
 using SkiaSharp;
+using System;
 
 namespace MComponents.Pdf.Helper.PropertyField
 {
@@ -21,6 +22,9 @@ namespace MComponents.Pdf.Helper.PropertyField
 
         public void Render(IMPropertyField pPropertyField, object pModel)
         {
+            throw new NotImplementedException();
+
+            /*
             var propInfo = ReflectionHelper.GetIMPropertyInfo(pModel.GetType(), pPropertyField.Property, pPropertyField.PropertyType);
 
             var paint = RenderStyles.GetDefaultPaint();
@@ -41,6 +45,7 @@ namespace MComponents.Pdf.Helper.PropertyField
             mCanvas.DrawText(str, mX, mY, paint);
 
             mY += textBounds.Size.Height;
+            */
         }
     }
 }

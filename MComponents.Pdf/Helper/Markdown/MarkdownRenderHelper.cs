@@ -137,6 +137,9 @@ namespace MComponents.Pdf.Helper.Markdown
 
         private void Render(ListBlock pListBlock)
         {
+
+            throw new NotImplementedException();
+            /*
             mPaint = RenderStyles.GetDefaultPaint();
 
             for (int i = mListBlocksWritten; i < pListBlock.Count; i++)
@@ -182,6 +185,7 @@ namespace MComponents.Pdf.Helper.Markdown
             mListBlocksWritten = 0;
             mX = mInitialX;
             mY += GetLineHeight();
+            */
         }
 
         private void Render(Inline[] pInlines)
@@ -202,6 +206,9 @@ namespace MComponents.Pdf.Helper.Markdown
 
         private void Render(Inline pInline)
         {
+
+            throw new NotImplementedException();
+            /*
             switch (pInline)
             {
                 case LiteralInline literal:
@@ -283,7 +290,7 @@ namespace MComponents.Pdf.Helper.Markdown
 
                 default:
                     return;
-            }
+            }*/
         }
 
 
@@ -304,18 +311,23 @@ namespace MComponents.Pdf.Helper.Markdown
 
         private void MoveCursorXForText(string text)
         {
+            /*
             var textBounds = new SKRect();
             var width = mPaint.MeasureText(text, ref textBounds);
 
             // mCursorX += textBounds.Size.Width;
             mX += width; // textBounds.Size.Width;
+            */
         }
 
         private float GetLineHeight()
         {
+            /*
             var textBounds = new SKRect();
             mPaint.MeasureText("A", ref textBounds);
             return textBounds.Size.Height + mLineSpace;
+            */
+            throw new NotImplementedException();
         }
 
     }

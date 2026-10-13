@@ -11,7 +11,7 @@ namespace MComponents.Pdf.Helper
         {
             var paint = new SKPaint();
 
-            paint.TextSize = (6 - pHeadingBlock.Level) * mTextSize;
+         //   paint.TextSize = (6 - pHeadingBlock.Level) * mTextSize;
             paint.IsAntialias = true;
             paint.Color = SKColors.Black;
 
@@ -26,10 +26,10 @@ namespace MComponents.Pdf.Helper
         {
             var paint = new SKPaint();
 
-            paint.TextSize = mTextSize;
+        //    paint.TextSize = mTextSize;
             paint.IsAntialias = true;
             paint.Color = SKColors.Black;
-            paint.Typeface = GetTypeface(false, false);
+         //   paint.Typeface = GetTypeface(false, false);
 
             return paint;
         }

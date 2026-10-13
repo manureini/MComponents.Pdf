@@ -10,16 +10,22 @@ namespace MComponents.Pdf.Helper
     {
         internal static string[] BreakToLines(SKPaint paint, float pX, float pBorderX, float maxWidth, string text)
         {
+            throw new NotImplementedException();
+            /*
             var spaceWidth = paint.MeasureText(" ");
 
             var lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             lines = lines.SelectMany(l => SplitLine(paint, pX, pBorderX, maxWidth, l, spaceWidth)).ToArray();
 
             return lines;
+            */
         }
 
         private static string[] SplitLine(SKPaint paint, float pX, float pBorderX, float maxWidth, string text, float spaceWidth)
         {
+            throw new NotImplementedException();
+
+            /*
             var result = new List<string>();
 
             var words = text.Split(new[] { " " }, StringSplitOptions.None);
@@ -49,6 +55,7 @@ namespace MComponents.Pdf.Helper
             result.Add(line.ToString());
 
             return result.ToArray();
+            */
         }
     }
 }
